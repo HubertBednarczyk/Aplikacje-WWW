@@ -1,5 +1,5 @@
-from polls.models import Person, Team  # Upewnij się, że models.py zawiera klasy Person i Team
-from polls.serializers import PersonSerializer  # Upewnij się, że serializers.py zawiera klasę PersonSerializer
+from polls.models import Person, Team
+from polls.serializers import PersonSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 import io
