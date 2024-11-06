@@ -1,56 +1,29 @@
 from django.db import models
-
-# deklaracja statycznej listy wyboru do wykorzystania w klasie modelu
-MONTHS = models.IntegerChoices('Miesiace', 'Styczeń Luty Marzec Kwiecień Maj Czerwiec Lipiec Sierpień Wrzesień Październik Listopad Grudzień')
-
-SHIRT_SIZES = (
-        ('S', 'Small'),
-        ('M', 'Medium'),
-        ('L', 'Large'),
-    )
+from django.utils import timezone
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=60)
-    country = models.CharField(max_length=2)
-
-    def __str__(self):
-        return f"{self.name}"
-
-
-class Person(models.Model):
-
-    name = models.CharField(max_length=60)
-    shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES, default=SHIRT_SIZES[0][0])
-    month_added = models.IntegerField(choices=MONTHS.choices, default=MONTHS.choices[0][0])
-    team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 
-class Stanowisko(models.Model):
-    nazwa = models.CharField(max_length=100, blank=False, null=False)
-    opis = models.TextField(blank=True, null=True)
+class Person(models.Model):
+    SHIRT_SIZES = [
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+    ]
+
+    MONTHS = models.TextChoices('MONTHS',
+                                'January February March April May June July August September October November December')
+
+    name = models.CharField(max_length=100)
+    shirt_size = models.CharField(max_length=3, choices=SHIRT_SIZES, default='S')
+    miesiac_dodania = models.CharField(max_length=9, choices=MONTHS.choices, default='January')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    data_dodania = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.nazwa
-
-
-class Osoba(models.Model):
-    class Plec(models.IntegerChoices):
-        KOBIETA = 1, 'Kobieta'
-        MEZCZYZNA = 2, 'Mężczyzna'
-        INNE = 3, 'Inne'
-
-    imie = models.CharField(max_length=100, blank=False, null=False)
-    nazwisko = models.CharField(max_length=100, blank=False, null=False)
-    plec = models.IntegerField(choices=Plec.choices, blank=False, null=False)
-    stanowisko = models.ForeignKey(Stanowisko, on_delete=models.CASCADE)
-    data_dodania = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.imie} {self.nazwisko}"
-
-    class Meta:
-        ordering = ['nazwisko']
+        return self.name
