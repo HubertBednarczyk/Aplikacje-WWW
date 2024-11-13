@@ -9,7 +9,7 @@ class PersonSerializer(serializers.Serializer):
     shirt_size = serializers.ChoiceField(choices=Person.SHIRT_SIZES, default=Person.SHIRT_SIZES[0][0])
     miesiac_dodania = serializers.ChoiceField(choices=Person.MONTHS.choices, default=Person.MONTHS.choices[0][0])
     team = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all())
-    data_dodania = serializers.DateTimeField(default=timezone.now)  # Usuń required=True
+    data_dodania = serializers.DateTimeField(default=timezone.now)
 
     def validate_name(self, value):
         if not value.isalpha():

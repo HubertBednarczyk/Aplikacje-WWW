@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Team(models.Model):
@@ -16,14 +16,16 @@ class Person(models.Model):
         ('L', 'Large'),
     ]
 
-    MONTHS = models.TextChoices('MONTHS',
-                                'January February March April May June July August September October November December')
+    MONTHS = models.IntegerChoices('Month',
+                                   'Styczeń Luty Marzec Kwiecień Maj Czerwiec Lipiec Sierpień Wrzesień Październik Listopad Grudzień')
 
     name = models.CharField(max_length=100)
-    shirt_size = models.CharField(max_length=3, choices=SHIRT_SIZES, default='S')
-    miesiac_dodania = models.CharField(max_length=9, choices=MONTHS.choices, default='January')
+    shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES)
+    miesiac_dodania = models.IntegerField(choices=MONTHS.choices)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    data_dodania = models.DateTimeField(default=timezone.now)
+    data_dodania = models.DateTimeField(auto_now_add=True)
+    wlasciciel = models.ForeignKey(User, on_delete=models.CASCADE,
+                                   default=1)  # Wartość domyślna jako ID utworzonego użytkownika
 
     def __str__(self):
         return self.name

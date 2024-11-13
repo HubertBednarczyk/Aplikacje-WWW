@@ -16,12 +16,23 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.urls import path, include
 from django.conf import settings
-from django.urls import include, path
+from django.conf.urls.static import static
+from django.http import HttpResponse
+from rest_framework.authtoken import views as drf_views
+from django.shortcuts import redirect
+from rest_framework.authtoken.views import obtain_auth_token
+
+
+def home(request):
+    return HttpResponse("<h1>Witamy na stronie głównej</h1><p>Przejdź dalej przez <a href='/polls/'>polls/</a></p>")
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # URL ścieżka do panelu admina
-    path('polls/', include('polls.urls')),  # Dodaj ścieżki Twojej aplikacji
+    path('admin/', admin.site.urls),
+    path('api-token-auth/', drf_views.obtain_auth_token, name='api_token_auth'),
+    path('polls/', include('polls.urls')),  # Upewnij się, że dołączasz URL-e dla aplikacji polls
 ]
 
 if settings.DEBUG:
